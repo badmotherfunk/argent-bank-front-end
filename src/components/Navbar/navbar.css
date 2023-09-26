@@ -36,4 +36,19 @@
   .fa-user-circle {
     margin-right: 5px;
   }
+
+  .logout-btn {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: 'Avenir';
+    color: #2c3e50;
+    margin-right: 0.5rem;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .logout-btn:hover {
+    text-decoration: underline;
+  }
   

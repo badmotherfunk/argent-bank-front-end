@@ -1,4 +1,6 @@
 import {Routes, Route} from "react-router-dom"
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 import Home from "./pages/Home/Home";
 import Error from "./pages/Error/Error";
 import './App.css';
@@ -17,6 +19,7 @@ function App() {
         <Route path="/profile" element={<User />} />
         <Route path="*" element={<Error />} />
       </Routes>
+      <ToastContainer />
       <Footer />
     </div>
   );

@@ -1,6 +1,10 @@
 import React from 'react'
 import "./loginForm.css"
 import {useState, useEffect } from 'react'
+import {useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify'
+import {login, reset } from '../../features/auth/authSlice'
 
 
 export default function LoginForm() {
@@ -12,6 +16,11 @@ export default function LoginForm() {
 
   const { email, password } = formData
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {user, isError, isSuccess, message} = useSelector( (state) => state.auth)
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -19,8 +28,29 @@ export default function LoginForm() {
     }))
   }
 
+  useEffect(() => {
+    if(isError) {
+      toast.error(message)
+    }
+
+    if(isSuccess || user) {
+      navigate('/profile')
+    }
+
+    // On réinitialise le state pour éviter les conflits
+    dispatch(reset())
+
+  }, [user, isError, isSuccess, message, navigate, dispatch])
+
   const onSubmit = (e) => {
     e.preventDefault()
+
+    const userData = {
+      email,
+      password,
+    }
+
+    dispatch(login(userData))
   }
 
   return (
