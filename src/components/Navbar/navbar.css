@@ -1,9 +1,9 @@
 .main-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 20px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+}
   
   .main-nav a {
     font-weight: bold;
@@ -51,4 +51,21 @@
   .logout-btn:hover {
     text-decoration: underline;
   }
+
+  .user-name {
+    font-family: 'Avenir';
+    color: #42b983;
+    margin-right: 0.5rem;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .userName-link {
+    text-decoration: none;
+  }
+  .userName-link:hover {
+    text-decoration: underline;
+  }
+
+
   

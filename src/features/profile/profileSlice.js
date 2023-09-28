@@ -1,21 +1,17 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import authService from './authService'
-
-// On récupère l'utilisateur du localStorage
-const user = JSON.parse(localStorage.getItem('user'))
+import profileService from './profileService'
 
 const initialState = {
-    user: user ? user : null,
+    user: '',
     isError: false,
     isSuccess : false,
     isLoading: false,
     message: ''
 }
 
-// Login user
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const userProfile = createAsyncThunk('profile/userName', async (thunkAPI) => {
     try {
-        return await authService.login(user)
+        return await profileService.userProfile()
     } catch (error) {
         const message = (error.response && 
             error.response.data && 
@@ -26,13 +22,8 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     }
 })
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-    await authService.logout()
-})
-
-
-export const authSlice = createSlice({
-    name: 'auth',
+export const profileSlice = createSlice({
+    name: 'profile',
     initialState,
     reducers: {
         reset: (state) => {
@@ -45,25 +36,22 @@ export const authSlice = createSlice({
     // Vérifie les résultats en attente ou si tout s'est bien passé ou si la demande a été rejetée.
     extraReducers: (builder) => {
         builder
-        .addCase(login.pending, (state) => {
+        .addCase(userProfile.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(login.fulfilled, (state, action) => {
+        .addCase(userProfile.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
             state.user = action.payload
         })
-        .addCase(login.rejected, (state, action) => {
+        .addCase(userProfile.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
             state.user = null
         })
-        .addCase(logout.fulfilled, (state) => {
-            state.user = null
-        })
     }
 })
 
-export const {reset} = authSlice.actions
-export default authSlice.reducer
+export const {reset} = profileSlice.actions
+export default profileSlice.reducer

@@ -9,6 +9,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {user} = useSelector((state) => state.auth)
+  const {userName} = useSelector((state) => state.profile.user)
 
   const onLogout = () => {
     dispatch(logout())
@@ -31,6 +32,9 @@ export default function Navbar() {
         <div>
           {user ? (
           <>
+          <Link className='userName-link' to="/profile">
+            <span className='user-name'>{userName}</span>
+          </Link>
             <i className="fa fa-user-circle"></i>
             <button className="logout-btn" onClick={onLogout}>
               Logout
