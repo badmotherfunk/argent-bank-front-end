@@ -1,8 +1,10 @@
 import React from 'react'
-import './user.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userProfile } from '../../features/profile/profileSlice'
+import './user.css'
+import EditName from '../../components/EditName/EditName'
+import { useNavigate } from 'react-router-dom'
 
 export default function User() {
   document.title = "Argent Bank - Profile"
@@ -10,18 +12,36 @@ export default function User() {
   const dispatch = useDispatch()
   const { user, isSuccess} = useSelector( (state) => state.auth)
   const { firstName, lastName } = useSelector( (state) => state.profile.user)
+
+  const navigate = useNavigate()
+  const [isEditing, setIsEditing] = useState(false); 
+
+  const token = JSON.parse(localStorage.getItem('user'))
+
   useEffect(() => {
+
+    if(!token) {
+      navigate('/')
+    }
+
     if(isSuccess || user) {
       dispatch(userProfile())
     }
-  }, [user, isSuccess, dispatch])
+  }, [user, isSuccess, token, navigate, dispatch])
 
     
   return (
     <main className="main bg-dark">
     <div className="header">
-      <h1>Welcome back<br /> {firstName} {lastName} !</h1>
-      <button className="edit-button">Edit Name</button>
+
+      {isEditing ? (
+        <EditName setIsEditing={setIsEditing} />
+      ) : (
+        <>
+        <h1>Welcome back<br /> {firstName} {lastName} !</h1>
+        <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Name</button>
+        </>
+      )}
     </div>
     <h2 className="sr-only">Accounts</h2>
     <section className="account">
