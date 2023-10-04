@@ -12,7 +12,7 @@ const updateUser = async (userData) => {
     })
 
     if(response.status === 200) {
-        return response.data.body
+        return response.data
     }
 }
 

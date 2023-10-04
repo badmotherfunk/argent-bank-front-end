@@ -1,41 +1,60 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { updateUser } from '../../features/updateUserName/updateUserNameSlice'
 import './editName.css'
 
 export default function EditName({setIsEditing}) {
-
-    const [userData, setUserData]  = useState({
-        userName:'',
-      })
-    
-      const {userName} = userData
   
-      const dispatch = useDispatch()
-      const {user} = useSelector( (state) => state.profile)
+  const dispatch = useDispatch()
+  
+  //State Redux
+  const {userInfo} = useSelector( (state) => state.profile)
+  const {data, isSuccess} = useSelector( (state) => state.newUserName)
 
-      const onChange = (e) => {
-        setUserData((prevState) => ({
-            ...prevState,
-            [e.target.name]: e.target.value,
-          }))
-      }
+  const [userData, setUserData]  = useState({
+      userName:'',
+  })
+  const [userProfile, setUserProfile] = useState()
 
-      const handleSubmitUserName = (e) => {
-        e.preventDefault()
-        const newUserData = {
-            userName,
-        }
-      
-        dispatch(updateUser(newUserData))
-        setIsEditing(false)
-      }
+  // On récupère la valeur de l'input et on actualise le state avec
+  const onChange = (e) => {
+    setUserData((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }))
+  }
 
-      const handleCancel = (e) => {
-        e.preventDefault()
-        setIsEditing(false)
-      }
+  // On déstructure la valeur du state dans {userName}
+  const {userName} = userData
+    
+  // Et on envoi nos données dans notre requête 'updateUser' avec dispatch 
+  const handleSubmitUserName = (e) => {
+    e.preventDefault()
+
+    dispatch(updateUser({userName}))
+    setIsEditing(false)
+  }
+
+  const handleCancel = (e) => {
+    e.preventDefault()
+    setIsEditing(false)
+  }
+
+  useEffect(() => {
+    // Si un utilisateur est connecté, alors on actualise le state avec l'userName du profil
+    if(userInfo) {
+      const userNameProfile = userInfo.body.userName
+      setUserProfile(userNameProfile)
+    }
+
+    // Si on modifie l'userName avec succès, alors on actualise le state avec le nouvel userName
+    if(isSuccess) {
+      const newUserName = data.body.userName
+      setUserProfile(newUserName)
+    }
+    
+  }, [isSuccess, userInfo, userName, data])
 
   return (
     <form className='editForm-container'>
@@ -48,7 +67,7 @@ export default function EditName({setIsEditing}) {
           id="userName"
           name="userName"       
           value={userName}
-          placeholder={user.userName}
+          placeholder={userProfile}
           onChange={onChange}
           required
            />
@@ -59,7 +78,7 @@ export default function EditName({setIsEditing}) {
           type="text" 
           id="firstName"
           name="firstName"       
-          placeholder={user.firstName}
+          placeholder={userInfo.body.firstName}
           disabled
            />
         </div>
@@ -69,7 +88,7 @@ export default function EditName({setIsEditing}) {
           type="text" 
           id="lastName"
           name="lastName"       
-          placeholder={user.lastName}
+          placeholder={userInfo.body.lastName}
           disabled
            />
         </div>

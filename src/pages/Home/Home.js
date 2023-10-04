@@ -4,9 +4,9 @@ import FeatureItem from '../../components/FeatureItem/FeatureItem'
 import './home.css'
 
 // Features Icon
-import moneyIcon from '../../designs/img/icon-money.png'
-import chatIcon from '../../designs/img/icon-chat.png'
-import securityIcon from '../../designs/img/icon-security.png'
+import moneyIcon from '../../designs/img/icon-money.webp'
+import chatIcon from '../../designs/img/icon-chat.webp'
+import securityIcon from '../../designs/img/icon-security.webp'
 
 // Features title/text
 const titleChat= "You are our #1 priority"

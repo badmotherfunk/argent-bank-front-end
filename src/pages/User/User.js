@@ -1,7 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { userProfile } from '../../features/profile/profileSlice'
+import { useSelector } from 'react-redux'
 import './user.css'
 import EditName from '../../components/EditName/EditName'
 import { useNavigate } from 'react-router-dom'
@@ -9,36 +8,38 @@ import { useNavigate } from 'react-router-dom'
 export default function User() {
   document.title = "Argent Bank - Profile"
 
-  const dispatch = useDispatch()
-  const { user, isSuccess} = useSelector( (state) => state.auth)
-  const { firstName, lastName } = useSelector( (state) => state.profile.user)
-
   const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState(false); 
 
-  const token = JSON.parse(localStorage.getItem('user'))
+  //State Redux
+  const { userInfo } = useSelector( (state) => state.profile)
+
+  const [isEditing, setIsEditing] = useState(false); 
+  const [fullName, setFullName] = useState('')
+  
+  const token = JSON.parse(localStorage.getItem('token'))
 
   useEffect(() => {
-
+    // Si il n'y a pas d'utilisateur connecté, alors on préviens la manipulation de l'URL et on redirige vers la page d'accueil
     if(!token) {
-      navigate('/')
+      navigate('/')   
     }
 
-    if(isSuccess || user) {
-      dispatch(userProfile())
+    // Si on à une réponse de nos données utilisateur, alors on actualise le state avec les informations du profil 
+    if(userInfo) {
+      const {firstName, lastName} = userInfo.body
+      setFullName(`${firstName} ${lastName}`)
     }
-  }, [user, isSuccess, token, navigate, dispatch])
+  }, [userInfo, token, navigate])
 
-    
   return (
     <main className="main bg-dark">
     <div className="header">
-
+    {/* Si on cliqué sur le mode édition alors on affiche notre composant, sinon on affiche la page d'accueil du profil */}
       {isEditing ? (
         <EditName setIsEditing={setIsEditing} />
       ) : (
         <>
-        <h1>Welcome back<br /> {firstName} {lastName} !</h1>
+        <h1>Welcome back<br /> {fullName} !</h1>
         <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Name</button>
         </>
       )}

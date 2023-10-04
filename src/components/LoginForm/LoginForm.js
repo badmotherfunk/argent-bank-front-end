@@ -4,7 +4,7 @@ import {useState, useEffect } from 'react'
 import {useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
-import {login, reset } from '../../features/auth/authSlice'
+import {login} from '../../features/auth/authSlice'
 
 
 export default function LoginForm() {
@@ -13,8 +13,6 @@ export default function LoginForm() {
     email:'',
     password: '',
   })
-
-  const { email, password } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -33,15 +31,16 @@ export default function LoginForm() {
       toast.error(message)
     }
 
+    // Si la connexion est un succès ou qu'il y a des données de notre réponse, alors on redirige vers la page profil
     if(isSuccess || user) {
       navigate('/profile')
     }
-
-    // On réinitialise le state pour éviter les conflits
-    dispatch(reset())
-
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
+  // On stock la valeur du state qu'on déstructure dans {email , password}
+  const { email, password } = formData
+
+  // Et on envoi nos données dans notre requête 'login' avec dispatch 
   const onSubmit = (e) => {
     e.preventDefault()
 

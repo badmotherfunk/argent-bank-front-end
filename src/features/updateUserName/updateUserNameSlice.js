@@ -1,10 +1,8 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import newUserUpdate from './updateUserNameService'
 
-const user = null
-
 const initialState = {
-    user: user ? user : null,
+    data: null,
     isError: false,
     isSuccess : false,
     isLoading: false,
@@ -12,9 +10,9 @@ const initialState = {
 }
 
 // Login user
-export const updateUser = createAsyncThunk('profile/userName', async (user, thunkAPI) => {
+export const updateUser = createAsyncThunk('profile/newUserName', async (data, thunkAPI) => {
     try {
-        return await newUserUpdate.updateUser(user)
+        return await newUserUpdate.updateUser(data)
     } catch (error) {
         const message = (error.response && 
             error.response.data && 
@@ -29,7 +27,7 @@ export const userNameSlice = createSlice({
     name: 'userName',
     initialState,
     reducers: {
-        reset: (state) => {
+        resetUserName: (state) => {
             state.isLoading = false
             state.isError = false
             state.isSuccess = false
@@ -45,16 +43,16 @@ export const userNameSlice = createSlice({
         .addCase(updateUser.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.user = action.payload
+            state.data = action.payload
         })
         .addCase(updateUser.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
-            state.user = null
+            state.data = null
         })
     }
 })
 
-export const {reset} = userNameSlice.actions
+export const {resetUserName} = userNameSlice.actions
 export default userNameSlice.reducer
