@@ -1,0 +1,250 @@
+#TRANSACTION
+
+swagger: "2.0"
+info:
+  title: "Argent Bank Transactions API Documentation"
+  description: "Argent Bank API documentation for transactions"
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
+host: "localhost:3001"
+basePath: "/api/v1"
+schemes:
+  - "http"
+paths:
+  /transactions/{user_id}/:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - "User Transactions"
+      summary: "View all transactions"
+      description: "API to get all transactions by account"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT token"
+          required: true
+          type: string
+        - name: user_id
+          in: path
+          description: "User ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: "User transactions retrieved successfully"
+          schema:
+            $ref: "#/definitions/TransactionsResponse"
+        "400":
+          description: "Invalid Account"
+        "401":
+          description: "Unauthorized, invalid token"
+        "500":
+          description: "Internal Server Error"
+
+  /transactions/{transaction_id}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - "Transactions Details"
+      summary: "User transaction details"
+      description: "API to get details of a transaction"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT token"
+          required: true
+          type: string
+        - name: transaction_id
+          in: path
+          description: "Transaction ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: "Transaction details retrieved successfully"
+          schema:
+            $ref: "#/definitions/Transaction"
+        '400':
+          description: "Invalid account or transaction ID"
+        '401':
+          description: "Unauthorized, invalid token"
+        '500':
+          description: "Internal Server Error"
+
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - "User Transactions Module"
+      summary: "Update user transaction"
+      description: "API for updating transaction information"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT token"
+          required: true
+          type: string
+        - in: path
+          name: transaction_id
+          description: "Transaction ID"
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Update transaction information"
+          required: true
+          schema:
+            $ref: "#/definitions/EditTransaction"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: "User transaction info updated successfully"
+          schema:
+            $ref: "#/definitions/EditTransactionResponse"
+        "400":
+          description: "Invalid Fields"
+        "401":
+          description: "Unauthorized, invalid token"
+        "403":
+          description: "Unauthorized, user not allowed to update this transaction"
+        "500":
+          description: "Internal Server Error"
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "User Transactions"
+      summary: "Delete a transaction note"
+      description: "API to delete a note"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT Token"
+          required: true
+          type: string
+        - in: path
+          name: transaction_id
+          description: "Transaction ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "204":
+          description: "Delete completed successfully"
+        "400":
+          description: "Invalid Fields"
+        "401":
+          description: "Unauthorized, invalid token"
+        "403":
+          description: "Unauthorized, user not allowed to delete this transaction"
+        "500":
+          description: "Internal Server Error"
+
+securityDefinitions:
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+definitions:
+  TransactionsResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Transactions ID"
+            date:
+              type: "string"
+              description: "transaction date"
+            description:
+              type: "string"
+              description: "transaction description"
+            amount:
+              type: "number"
+              description: "transaction amount"
+            balance:
+              type: "number"
+              description: "account balance after transaction"
+        example:
+          - id: 1
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+          - id: 2
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+          - id: 3
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+
+  Transaction:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+            description: "transaction ID"
+          transactionType:
+            type: "string"
+            description: "transaction type"
+          category:
+            type: "string"
+            description: "transaction category"
+          note:
+            type: "string"
+            description: "user's notes for transaction"
+
+
+  EditTransaction:
+    type: "object"
+    properties:
+      category:
+        type: "string"
+      note:
+        type: "string"
+        
+  EditTransactionResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "object"
+        properties:
+          category:
+            type: "string"
+            description: "Categroy updated"
+          note:
+            type: "string"
+            description: "Note updated"
