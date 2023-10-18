@@ -13,9 +13,9 @@ const initialState = {
 }
 
 // Login user
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) => {
     try {
-        return await authService.login(user)
+        return await authService.login(userData)
     } catch (error) {
         const message = (error.response && 
             error.response.data && 
@@ -29,7 +29,6 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout()
 })
-
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -64,6 +63,5 @@ export const authSlice = createSlice({
         })
     }
 })
-
 export const {reset} = authSlice.actions
 export default authSlice.reducer

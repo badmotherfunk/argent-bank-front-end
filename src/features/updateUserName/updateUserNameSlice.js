@@ -9,7 +9,7 @@ const initialState = {
     message: ''
 }
 
-// Login user
+// Update userName
 export const updateUser = createAsyncThunk('profile/newUserName', async (data, thunkAPI) => {
     try {
         return await newUserUpdate.updateUser(data)

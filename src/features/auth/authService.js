@@ -13,6 +13,9 @@ const login = async (userData) => {
     if(document.getElementById('remember-me').checked) {
         localStorage.setItem('email', JSON.stringify(userData.email))
         localStorage.setItem('password', JSON.stringify(userData.password))
+    } else {
+        localStorage.removeItem('email')
+        localStorage.removeItem('password')
     }
 
     return response.data

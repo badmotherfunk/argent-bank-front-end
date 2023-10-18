@@ -26,16 +26,21 @@ export default function LoginForm() {
     }))
   }
 
+  // Remember Me
   useEffect(() => {
-    if(isError) {
-      toast.error(message)
-    }
+    const rememberEmail = JSON.parse(localStorage.getItem('email'))
+    const rememberPassword = JSON.parse(localStorage.getItem('password'))
 
-    // Si la connexion est un succès ou qu'il y a des données de notre réponse, alors on redirige vers la page profil
-    if(isSuccess || user) {
-      navigate('/profile')
+    //Si nos éléments du localStorage sont différents de "null", alors on change notre state et on stock les valeurs du localStorage dans nos inputs
+    if(localStorage.getItem('email') !== null && localStorage.getItem('password') !== null ) {
+      setFormData(() => ({
+        email: rememberEmail,
+        password: rememberPassword
+      }))
     }
-  }, [user, isError, isSuccess, message, navigate, dispatch])
+  }, [])
+
+
 
   // On stock la valeur du state qu'on déstructure dans {email , password}
   const { email, password } = formData
@@ -51,6 +56,17 @@ export default function LoginForm() {
 
     dispatch(login(userData))
   }
+
+  useEffect(() => {
+    if(isError) {
+      toast.error(message)
+    }
+
+    // Si la connexion est un succès ou qu'il y a des données de notre réponse, alors on redirige vers la page profil
+    if(isSuccess || user) {
+      navigate('/profile')
+    }
+  }, [user, isError, isSuccess, message, navigate, dispatch])
 
   return (
     <main className="main bg-dark">
@@ -86,7 +102,7 @@ export default function LoginForm() {
           id="remember-me" /><label 
           htmlFor="remember-me">Remember me</label>
         </div>
-        <button className="sign-in-button" type='submit'>Sign In</button>  
+        <button className="sign-in-button" type='submit' >Sign In</button>  
       </form>
     </section>
   </main>

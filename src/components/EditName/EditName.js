@@ -15,6 +15,7 @@ export default function EditName({setIsEditing}) {
   const [userData, setUserData]  = useState({
       userName:'',
   })
+  
   const [userProfile, setUserProfile] = useState()
 
   // On récupère la valeur de l'input et on actualise le state avec
@@ -27,6 +28,8 @@ export default function EditName({setIsEditing}) {
 
   // On déstructure la valeur du state dans {userName}
   const {userName} = userData
+
+  console.log(userData)
     
   // Et on envoi nos données dans notre requête 'updateUser' avec dispatch 
   const handleSubmitUserName = (e) => {

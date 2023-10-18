@@ -11,13 +11,13 @@ basePath: "/api/v1"
 schemes:
   - "http"
 paths:
-  /transactions/{user_id}/:
+  /account/{account_id}/transactions:
     get:
       security:
         - Bearer: []
       tags:
         - "User Transactions"
-      summary: "View all transactions"
+      summary: "View all transactions from an account"
       description: "API to get all transactions by account"
       parameters:
         - in: header
@@ -25,9 +25,9 @@ paths:
           description: "Attach Bearer JWT token"
           required: true
           type: string
-        - name: user_id
+        - name: account_id
           in: path
-          description: "User ID"
+          description: "Account ID"
           required: true
           type: integer
       produces:
